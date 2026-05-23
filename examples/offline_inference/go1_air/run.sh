@@ -8,4 +8,18 @@ if [[ -n "${GO1_AIR_MODEL_DIR:-}" ]]; then
   export GO1_AIR_MODEL_DIR
 fi
 
-python "$ROOT_DIR/smoke.py" "$@"
+# --end2end  → run the full end2end harness instead of the minimal smoke test.
+# --collect  → run collect_results.sh for timestamped artifact archiving.
+case "${1:-}" in
+  --end2end)
+    shift
+    python "$ROOT_DIR/end2end.py" "$@"
+    ;;
+  --collect)
+    shift
+    bash "$ROOT_DIR/collect_results.sh" "$@"
+    ;;
+  *)
+    python "$ROOT_DIR/smoke.py" "$@"
+    ;;
+esac
